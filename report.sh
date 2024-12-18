@@ -2,10 +2,11 @@
 
 echo $('date')
 echo $USER
-ifconfig | grep -w "inet"
+ip addr | grep -w "inet"
 echo $('hostname')
 uname -v
 uptime
-df -u
-
-
+df -h
+free -ht
+grep 'cpu cores' /proc/cpuinfo | uniq
+cat /proc/cpuinfo | grep MHz
