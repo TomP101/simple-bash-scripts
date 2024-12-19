@@ -24,7 +24,6 @@ insert_data(){
 #gets index of the table, if table cannot be found returns -1
 get_index(){
 	tables=($(head -n 1 $database.txt))
-	read -r -a array <<< "$@"
 	table_chosen=$1
 	table_index=-1
 	temp_index=0
@@ -53,7 +52,26 @@ select_data(){
 	done < $database.txt
 }
 
-
+delete_data(){
+	input=$(echo $@ | tr "=" " ")
+	read -r -a array <<< "$input"
+	table=${array[1]}
+	value=${array[2]}
+	echo $table
+	echo $value
+	while read -r linia; do
+		out=()
+		read -r -a tablica <<< "$linia"
+		get_index $table
+		index=$?
+		if [ "$index" -le "${#tablica[@]}" ] && [ ! $value == "${tablica[$index]}" ]; then
+				echo $linia >> new_$database.txt
+		fi
+	done < $database.txt
+	
+	rm $database.txt
+	mv new_$database.txt $database.txt
+}
 
 $func $database ${@:3}
 
