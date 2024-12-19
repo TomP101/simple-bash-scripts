@@ -19,6 +19,7 @@ insert_data(){
 	for name in ${@:2}; do
 		echo -n "$name "  >> $database.txt
 	done
+	
 }
 
 #gets index of the table, if table cannot be found returns -1
@@ -57,8 +58,6 @@ delete_data(){
 	read -r -a array <<< "$input"
 	table=${array[1]}
 	value=${array[2]}
-	echo $table
-	echo $value
 	while read -r linia; do
 		out=()
 		read -r -a tablica <<< "$linia"
