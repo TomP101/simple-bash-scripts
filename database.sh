@@ -2,7 +2,7 @@
 
 set -f #disable globbing in order to not have to escape * 
 
-func=$1
+func="$1"
 database=$2
 
 create_db(){
@@ -15,7 +15,7 @@ create_db(){
 }
 
 create_table(){
-	if [ ! -f $1.txt ]; then
+	if [ ! -f "$1.txt" ]; then
 		echo "$1 database does not exist"
 		echo "create $1 database with ./database.sh create_db $1 "
 		exit 1
@@ -27,16 +27,16 @@ create_table(){
 	fi
 
 
-	echo -n "** " >> $database.txt 
+	echo -n "** " >> "$database".txt 
 
 
 	for name in ${@:2}; do
-		echo -n "$name "  >> $database.txt
+		echo -n "$name "  >> "$database".txt
 	done
 	
-	echo -n "** " >> $database.txt 
+	echo -n "** " >> "$database".txt 
 
-	echo "" >> $database.txt
+	echo "" >> "$database".txt
 
 }
 
@@ -45,9 +45,9 @@ insert_data(){
 	
 	args=${@:2}
 	len=${#args}
-	if [ $len -gt 38 ]; then
+	if [ "$len" -gt 38 ]; then
 		echo -n "line length is: "
-		echo $len
+		echo "$len"
 	
 		echo "line cannot be longer than 38 characters"
 		exit 1
@@ -60,23 +60,23 @@ insert_data(){
 		fi
 	done
 
-	echo -n "** " >> $database.txt 
+	echo -n "** " >> "$database".txt 
 
 		
 	for name in $args; do
-		echo -n "$name "  >> $database.txt
+		echo -n "$name "  >> "$database".txt
 		
 	done
 
-	echo -n " **" >> $database.txt 
+	echo -n " **" >> "$database".txt 
 		
-	echo "" >> $database.txt
+	echo "" >> "$database".txt
 	
 }
 
 #gets index of the table, if table cannot be found returns -1
 get_index(){
-	tables=($(head -n 1 $database.txt))
+	tables=($(head -n 1 "$database".txt))
 	table_chosen=$1
 	table_index=-1
 	temp_index=0
@@ -94,7 +94,7 @@ select_data(){
 		read -r -a tablica <<< "$linia"
 		out=()
 		for table in ${@:2}; do
-			get_index $table
+			get_index "$table"
 			index=$?
 			
 			if [ "$index" -le "${#tablica[@]}" ]; then
@@ -102,7 +102,7 @@ select_data(){
 			fi
 		done
 		echo "${out[@]}"
-	done < $database.txt
+	done < "$database".txt
 }
 
 delete_data(){
@@ -113,14 +113,14 @@ delete_data(){
 	while read -r linia; do
 		out=()
 		read -r -a tablica <<< "$linia"
-		get_index $table
+		get_index "$table"
 		index=$?
-		if [ "$index" -le "${#tablica[@]}" ] && [ ! $value == "${tablica[$index]}" ]; then
-				echo $linia >> new_$database.txt
+		if [ "$index" -le "${#tablica[@]}" ] && [ ! "$value" == "${tablica[$index]}" ]; then
+				echo "$linia" >> new_"$database".txt
 		fi
-	done < $database.txt
+	done < "$database".txt
 	
-	mv -f new_$database.txt $database.txt
+	mv -f new_"$database".txt "$database".txt
 
 }
 
@@ -130,5 +130,5 @@ command_not_found_handle() {
 }
 
 
-$func $database ${@:3}
+$func "$database" ${@:3}
 
