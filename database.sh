@@ -15,6 +15,17 @@ create_table(){
 }
 
 insert_data(){
+
+	args=${@:2}
+	len=${#args}
+	if [ $len -gt 38 ]; then
+		echo -n "line length is: "
+		echo $len
+	
+		echo "line cannot be longer than 38 characters"
+		exit 1
+	fi
+
 	echo "" >> $database.txt 
 	for name in ${@:2}; do
 		echo -n "$name "  >> $database.txt
