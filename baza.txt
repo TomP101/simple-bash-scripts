@@ -1,5 +1,4 @@
-pierwszy drugi trzeci czwarty
-a1 b2 v2 d1
-a2 b2 v1 d2
-a2 b3 v3 d3
-a b c d 
+** pierwszy drugi trzeci czwarty **
+** a1 b2 v2 d1 **
+** a2 b2 v1 d2 **
+** a2 b3 v3 d3 **

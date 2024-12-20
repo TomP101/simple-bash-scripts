@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -f #disable globbing in order to not have to escape * 
+
 func=$1
 database=$2
 
@@ -23,16 +25,24 @@ create_table(){
 		echo "use: ./database.sh create_table $1 <table_name>"
 		exit 1
 	fi
+
+
+	echo -n "** " >> $database.txt 
+
+
 	for name in ${@:2}; do
 		echo -n "$name "  >> $database.txt
 	done
 	
+	echo -n "** " >> $database.txt 
+
 	echo "" >> $database.txt
 
 }
 
 insert_data(){
 
+	
 	args=${@:2}
 	len=${#args}
 	if [ $len -gt 38 ]; then
@@ -50,11 +60,16 @@ insert_data(){
 		fi
 	done
 
+	echo -n "** " >> $database.txt 
 
+		
 	for name in $args; do
 		echo -n "$name "  >> $database.txt
+		
 	done
-	
+
+	echo -n " **" >> $database.txt 
+		
 	echo "" >> $database.txt
 	
 }
