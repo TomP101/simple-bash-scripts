@@ -25,9 +25,16 @@ insert_data(){
 		echo "line cannot be longer than 38 characters"
 		exit 1
 	fi
+	
+	for arg in $args; do
+		if [ ${#arg} -gt 8 ]; then
+			echo "value cannot be longer than 8 characters"
+			exit 1
+		fi
+	done
 
 	echo "" >> $database.txt 
-	for name in ${@:2}; do
+	for name in $args; do
 		echo -n "$name "  >> $database.txt
 	done
 	
