@@ -4,13 +4,30 @@ func=$1
 database=$2
 
 create_db(){
+	if [ -z "$1" ] ;then
+		echo "no name provided"
+		echo "use: ./database.sh create_db <database_name>"
+		exit 1
+	fi
 	touch $1.txt
 }
 
 create_table(){
+	if [ ! -f $1.txt ]; then
+		echo "$1 database does not exist"
+		echo "create $1 database with ./database.sh create_db $1 "
+		exit 1
+	fi
+	if [ -z "$2" ] ;then
+		echo "at least 1 table name has to be given"
+		echo "use: ./database.sh create_table $1 <table_name>"
+		exit 1
+	fi
 	for name in ${@:2}; do
 		echo -n "$name "  >> $database.txt
 	done
+	
+	echo "" >> $database.txt
 
 }
 
@@ -33,10 +50,12 @@ insert_data(){
 		fi
 	done
 
-	echo "" >> $database.txt 
+
 	for name in $args; do
 		echo -n "$name "  >> $database.txt
 	done
+	
+	echo "" >> $database.txt
 	
 }
 
@@ -67,7 +86,7 @@ select_data(){
 				out+="${tablica[$index]} "
 			fi
 		done
-		echo "${out[*]}"
+		echo "${out[@]}"
 	done < $database.txt
 }
 
@@ -86,9 +105,15 @@ delete_data(){
 		fi
 	done < $database.txt
 	
-	rm $database.txt
-	mv new_$database.txt $database.txt
+	mv -f new_$database.txt $database.txt
+
 }
+
+command_not_found_handle() {
+	echo "no $1 commands"
+	echo "available command: create_db create_table insert_data select_data delete_data"
+}
+
 
 $func $database ${@:3}
 
